@@ -1,6 +1,11 @@
 # Fork from https://github.com/dgaddy/silent_speech
 ## Environment Setup
 ``` shell
+# Create python virtual environment
+conda create --name venv python=3.7
+conda activate venv 
+
+# Install dependency
 conda install pytorch==1.7.1 torchaudio==0.7.2 cudatoolkit=10.1 -c pytorch
 conda install libsndfile=1.0.28 -c conda-forge
 pip install -r requirements.txt
