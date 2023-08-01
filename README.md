@@ -5,13 +5,17 @@
 conda create --name venv python=3.7
 conda activate venv 
 
-# Install dependency
+# Install dependencies
 conda install pytorch==1.7.1 torchaudio==0.7.2 cudatoolkit=10.1 -c pytorch
 conda install libsndfile=1.0.28 -c conda-forge
 pip install -r requirements.txt
 curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.8.2/deepspeech-0.8.2-models.pbmm
 curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.8.2/deepspeech-0.8.2-models.scorer
 ```
+
+## Download pre-trained Models
+Pre-trained models for the vocoder and transduction model are available at
+<https://doi.org/10.5281/zenodo.6747411>.
 
 ## Evaluation
 To evaluate a model on the test set, use

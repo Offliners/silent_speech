@@ -7,14 +7,14 @@ import soundfile as sf
 import numpy as np
 from unidecode import unidecode
 import librosa
+from tqdm import tqdm
 
 def evaluate(testset, audio_directory):
     model = deepspeech.Model('deepspeech-0.8.2-models.pbmm')
     model.enableExternalScorer('deepspeech-0.8.2-models.scorer')
     predictions = []
     targets = []
-    for i, datapoint in enumerate(testset):
-        print(i)
+    for i, datapoint in enumerate(tqdm(testset)):
         audio, rate = sf.read(os.path.join(audio_directory,f'example_output_{i}.wav'))
         if rate != 16000:
             audio = librosa.resample(y=audio, orig_sr=rate,  target_sr=16000)

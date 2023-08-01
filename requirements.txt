@@ -8,3 +8,4 @@ numba==0.54.1
 jiwer==3.0.2
 unidecode==1.3.6
 praat-textgrids==1.4.0
+tqdm==4.65.0
