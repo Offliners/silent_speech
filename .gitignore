@@ -1,0 +1,9 @@
+*tar.gz
+*.zip
+*.pbmm
+*.scorer
+__pycache__/
+pretrained_models/
+text_alignments/
+emg_data/
+evaluation_output/

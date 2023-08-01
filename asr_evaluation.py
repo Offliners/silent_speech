@@ -16,7 +16,7 @@ def evaluate(testset, audio_directory):
     for i, datapoint in enumerate(testset):
         audio, rate = sf.read(os.path.join(audio_directory,f'example_output_{i}.wav'))
         if rate != 16000:
-            audio = librosa.resample(audio, rate, 16000)
+            audio = librosa.resample(y=audio, orig_sr=rate,  target_sr=16000)
         assert model.sampleRate() == 16000, 'wrong sample rate'
         audio_int16 = (audio*(2**15)).astype(np.int16)
         text = model.stt(audio_int16)
