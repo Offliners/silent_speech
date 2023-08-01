@@ -1,3 +1,19 @@
+# Fork from https://github.com/dgaddy/silent_speech
+## Environment Setup
+``` shell
+conda install pytorch==1.7.1 torchaudio==0.7.2 cudatoolkit=10.1 -c pytorch
+conda install libsndfile=1.0.28 -c conda-forge
+pip install -r requirements.txt
+curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.8.2/deepspeech-0.8.2-models.pbmm
+curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.8.2/deepspeech-0.8.2-models.scorer
+```
+
+## Evaluation
+To evaluate a model on the test set, use
+```shell
+python evaluate.py --models ./pretrained_models/transduction_model.pt --hifigan_checkpoint ./pretrained_models/hifigan_finetuned/checkpoint --output_directory evaluation_output
+```
+
 # Voicing Silent Speech
 
 This repository contains code for synthesizing speech audio from silently mouthed words captured with electromyography (EMG).

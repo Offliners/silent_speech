@@ -9,8 +9,8 @@ from unidecode import unidecode
 import librosa
 
 def evaluate(testset, audio_directory):
-    model = deepspeech.Model('deepspeech-0.7.0-models.pbmm')
-    model.enableExternalScorer('deepspeech-0.7.0-models.scorer')
+    model = deepspeech.Model('deepspeech-0.8.2-models.pbmm')
+    model.enableExternalScorer('deepspeech-0.8.2-models.scorer')
     predictions = []
     targets = []
     for i, datapoint in enumerate(testset):
