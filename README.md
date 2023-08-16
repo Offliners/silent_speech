@@ -1,5 +1,10 @@
 # Fork from https://github.com/dgaddy/silent_speech
+* Force-aligned phonemes dataset : [Link](https://github.com/dgaddy/silent_speech_alignments/raw/main/text_alignments.tar.gz)
+* EMG dataset : [Link](https://doi.org/10.5281/zenodo.4064408)
+* Pretrained model weight : [Link](https://zenodo.org/record/6747411)
+
 ## Environment Setup
+* For Windows 10
 ``` shell
 # Create python virtual environment
 conda create --name venv python=3.7
@@ -8,19 +13,24 @@ conda activate venv
 # Install dependencies
 conda install pytorch==1.7.1 torchaudio==0.7.2 cudatoolkit=10.1 -c pytorch
 conda install libsndfile=1.0.28 -c conda-forge
-pip install -r requirements.txt
+pip install -r requirements_windows.txt
 curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.8.2/deepspeech-0.8.2-models.pbmm
 curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.8.2/deepspeech-0.8.2-models.scorer
 ```
 
-## Download pre-trained Models
-Pre-trained models for the vocoder and transduction model are available at
-<https://doi.org/10.5281/zenodo.6747411>.
+* For Ubuntu 18.04
+```shell
+```
 
 ## Evaluation
-To evaluate a model on the test set, use
+To evaluate a model with CPU, use
 ```shell
 python evaluate.py --models ./pretrained_models/transduction_model.pt --hifigan_checkpoint ./pretrained_models/hifigan_finetuned/checkpoint --output_directory evaluation_output
+```
+
+To evaluate a model with GPU (cuda), use
+```shell
+python evaluate.py --models ./pretrained_models/transduction_model.pt --hifigan_checkpoint ./pretrained_models/hifigan_finetuned/checkpoint --output_directory evaluation_output --device cuda
 ```
 
 # Voicing Silent Speech

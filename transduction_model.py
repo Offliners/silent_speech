@@ -58,9 +58,12 @@ def test(model, testset, device):
 def save_output(model, datapoint, filename, device, audio_normalizer, vocoder):
     model.eval()
     with torch.no_grad():
-        sess = torch.tensor(datapoint['session_ids'], device=device).unsqueeze(0)
-        X = torch.tensor(datapoint['emg'], dtype=torch.float32, device=device).unsqueeze(0)
-        X_raw = torch.tensor(datapoint['raw_emg'], dtype=torch.float32, device=device).unsqueeze(0)
+        sess = datapoint['session_ids'].clone().detach().to(device)
+        sess = sess.unsqueeze(0)
+        X = datapoint['emg'].clone().detach().to(device)
+        X = X.unsqueeze(0)
+        X_raw = datapoint['raw_emg'].clone().detach().to(device)
+        X_raw = X_raw.unsqueeze(0)
 
         pred, _ = model(X, X_raw, sess)
         y = pred.squeeze(0)

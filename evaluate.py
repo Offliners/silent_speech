@@ -1,6 +1,8 @@
 import sys
 import os
 import logging
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
 import torch
 from torch import nn
@@ -16,6 +18,7 @@ from absl import flags
 FLAGS = flags.FLAGS
 flags.DEFINE_list('models', [], 'identifiers of models to evaluate')
 flags.DEFINE_boolean('dev', False, 'evaluate dev insead of test')
+flags.DEFINE_string('device', "cpu", 'Whether to use cpu (default: cpu)')
 
 class EnsembleModel(nn.Module):
     def __init__(self, models):
@@ -41,11 +44,20 @@ def main():
     dev = FLAGS.dev
     testset = EMGDataset(dev=dev, test=not dev)
 
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    if FLAGS.device == 'cpu':
+        device = 'cpu'
+    elif FLAGS.device == 'cuda':
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    else:
+        print('Error device!')
 
     models = []
     for fname in FLAGS.models:
-        state_dict = torch.load(fname)
+        if device == 'cpu':
+            state_dict = torch.load(fname, map_location='cpu')
+        else:
+            state_dict = torch.load(fname)
+
         model = Model(testset.num_features, testset.num_speech_features, len(phoneme_inventory)).to(device)
         model.load_state_dict(state_dict)
         models.append(model)
@@ -54,7 +66,7 @@ def main():
     _, _, confusion = test(ensemble, testset, device)
     print_confusion(confusion)
 
-    vocoder = Vocoder()
+    vocoder = Vocoder(device=device)
 
     for i, datapoint in enumerate(testset):
         save_output(ensemble, datapoint, os.path.join(FLAGS.output_directory, f'example_output_{i}.wav'), device, testset.mfcc_norm, vocoder)
