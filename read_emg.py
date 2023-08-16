@@ -145,9 +145,10 @@ class SizeAwareSampler(torch.utils.data.Sampler):
         # dropping last incomplete batch
 
 class EMGDataset(torch.utils.data.Dataset):
-    def __init__(self, base_dir=None, limit_length=False, dev=False, test=False, no_testset=False, no_normalizers=False):
+    def __init__(self, base_dir=None, limit_length=False, dev=False, test=False, no_testset=False, no_normalizers=False, device='cpu'):
 
         self.text_align_directory = FLAGS.text_align_directory
+        self.device = device
 
         if no_testset:
             devset = []
@@ -242,7 +243,13 @@ class EMGDataset(torch.utils.data.Dataset):
 
         text_int = np.array(self.text_transform.text_to_int(text), dtype=np.int64)
 
-        result = {'audio_features':torch.from_numpy(mfccs).pin_memory(), 'emg':torch.from_numpy(emg).pin_memory(), 'text':text, 'text_int': torch.from_numpy(text_int).pin_memory(), 'file_label':idx, 'session_ids':torch.from_numpy(session_ids).pin_memory(), 'book_location':book_location, 'silent':directory_info.silent, 'raw_emg':torch.from_numpy(raw_emg).pin_memory()}
+        if self.device == 'cpu':
+            result = {'audio_features':torch.from_numpy(mfccs), 'emg':torch.from_numpy(emg), 'text':text, 'text_int': torch.from_numpy(text_int), 'file_label':idx, 'session_ids':torch.from_numpy(session_ids), 'book_location':book_location, 'silent':directory_info.silent, 'raw_emg':torch.from_numpy(raw_emg)}
+        elif self.device == 'cuda':
+            result = {'audio_features':torch.from_numpy(mfccs).pin_memory(), 'emg':torch.from_numpy(emg).pin_memory(), 'text':text, 'text_int': torch.from_numpy(text_int).pin_memory(), 'file_label':idx, 'session_ids':torch.from_numpy(session_ids).pin_memory(), 'book_location':book_location, 'silent':directory_info.silent, 'raw_emg':torch.from_numpy(raw_emg).pin_memory()}
+        else:
+            print('Unknown device!')
+            os._exit(1)
 
         if directory_info.silent:
             voiced_directory, voiced_idx = self.voiced_data_locations[book_location]
@@ -253,12 +260,19 @@ class EMGDataset(torch.utils.data.Dataset):
                 voiced_emg = self.emg_norm.normalize(voiced_emg)
                 voiced_emg = 8*np.tanh(voiced_emg/8.)
 
-            result['parallel_voiced_audio_features'] = torch.from_numpy(voiced_mfccs).pin_memory()
-            result['parallel_voiced_emg'] = torch.from_numpy(voiced_emg).pin_memory()
+            if self.device == 'cpu':
+                result['parallel_voiced_audio_features'] = torch.from_numpy(voiced_mfccs)
+                result['parallel_voiced_emg'] = torch.from_numpy(voiced_emg)
+            else:
+                result['parallel_voiced_audio_features'] = torch.from_numpy(voiced_mfccs).pin_memory()
+                result['parallel_voiced_emg'] = torch.from_numpy(voiced_emg).pin_memory()
 
             audio_file = f'{voiced_directory.directory}/{voiced_idx}_audio_clean.flac'
 
-        result['phonemes'] = torch.from_numpy(phonemes).pin_memory() # either from this example if vocalized or aligned example if silent
+        if self.device == 'cpu':
+            result['phonemes'] = torch.from_numpy(phonemes)
+        else:
+            result['phonemes'] = torch.from_numpy(phonemes).pin_memory() # either from this example if vocalized or aligned example if silent
         result['audio_file'] = audio_file
 
         return result

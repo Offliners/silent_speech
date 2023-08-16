@@ -21,7 +21,12 @@ class Vocoder(object):
         with open(config_file) as f:
             hparams = AttrDict(json.load(f))
         self.generator = Generator(hparams).to(device)
-        self.generator.load_state_dict(torch.load(checkpoint_file)['generator'])
+        if device == 'cpu':
+            self.generator.load_state_dict(torch.load(checkpoint_file, map_location='cpu')['generator'])
+        elif device == 'cuda':
+            self.generator.load_state_dict(torch.load(checkpoint_file)['generator'])
+        else:
+            print('Error device!')
         self.generator.eval()
         self.generator.remove_weight_norm()
 
