@@ -3,6 +3,13 @@
 * EMG dataset : [Link](https://doi.org/10.5281/zenodo.4064408)
 * Pretrained model weight : [Link](https://zenodo.org/record/6747411)
 
+```shell
+# unzip these datasets and pretrained models
+tar zxvf text_alignments.tar.gz
+tar zxvf emg_data.tar.gz
+unzip pretrained_models.zip
+```
+
 ## Environment Setup
 ``` shell
 # Create python virtual environment
