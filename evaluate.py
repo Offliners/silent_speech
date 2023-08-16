@@ -42,7 +42,7 @@ def main():
             ], level=logging.INFO, format="%(message)s")
 
     dev = FLAGS.dev
-    testset = EMGDataset(dev=dev, test=not dev, device=device)
+    testset = EMGDataset(dev=dev, test=not dev, device=FLAGS.device)
 
     if FLAGS.device == 'cpu':
         device = 'cpu'
