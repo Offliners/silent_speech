@@ -42,7 +42,7 @@ def main():
             ], level=logging.INFO, format="%(message)s")
 
     dev = FLAGS.dev
-    testset = EMGDataset(dev=dev, test=not dev)
+    testset = EMGDataset(dev=dev, test=not dev, device=device)
 
     if FLAGS.device == 'cpu':
         device = 'cpu'
@@ -50,6 +50,7 @@ def main():
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
     else:
         print('Error device!')
+        os._exit(1)
 
     models = []
     for fname in FLAGS.models:

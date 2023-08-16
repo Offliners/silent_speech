@@ -27,6 +27,7 @@ class Vocoder(object):
             self.generator.load_state_dict(torch.load(checkpoint_file)['generator'])
         else:
             print('Error device!')
+            os._exit(1)
         self.generator.eval()
         self.generator.remove_weight_norm()
 
