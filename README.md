@@ -4,7 +4,6 @@
 * Pretrained model weight : [Link](https://zenodo.org/record/6747411)
 
 ## Environment Setup
-* For Windows 10
 ``` shell
 # Create python virtual environment
 conda create --name venv python=3.7
@@ -13,16 +12,9 @@ conda activate venv
 # Install dependencies
 conda install pytorch==1.7.1 torchaudio==0.7.2 cudatoolkit=10.1 -c pytorch
 conda install libsndfile=1.0.28 -c conda-forge
-pip install -r requirements_windows.txt
+pip install -r requirements.txt
 curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.8.2/deepspeech-0.8.2-models.pbmm
 curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.8.2/deepspeech-0.8.2-models.scorer
-```
-
-* For Ubuntu 18.04
-```shell
-# Create python virtual environment
-conda create --name venv python=3.7
-conda activate venv 
 ```
 
 ## Folder Format
