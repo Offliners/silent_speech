@@ -20,6 +20,21 @@ curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.8.2/deepspee
 
 * For Ubuntu 18.04
 ```shell
+# Create python virtual environment
+conda create --name venv python=3.7
+conda activate venv 
+```
+
+## Folder Format
+```shell
+silent_speech/
+    data_collection/
+    hifi_gan/
+    emg_data/                       # Need to download it yourself
+    pretrained_models/              # Need to download it yourself
+    text_alignments/                # Need to download it yourself
+    deepspeech-0.8.2-models.pbmm    # Need to download it yourself
+    deepspeech-0.8.2-models.scorer  # Need to download it yourself
 ```
 
 ## Evaluation
